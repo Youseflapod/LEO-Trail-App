@@ -20,7 +20,7 @@
 
   <style>
     div {
-      background-image: url(startup.png);
+      background-image: url(startup.jpg);
       background-repeat: no-repeat;
       background-size: contain;
       background-color: black;
@@ -33,19 +33,38 @@
       align-items:center;
       text-align:center
     }
+    
+    .fade-in {
+      animation: fadeIn ease 2s;
+      -webkit-animation: fadeIn ease 2s;
+      -moz-animation: fadeIn ease 2s;
+    }
+    @keyframes fadeIn{
+      0% {opacity:0}
+      100% {opacity:1;}
+    }
+    @-moz-keyframes fadeIn {
+      0% {opacity:0}
+      100% {opacity:1;}
+    }
+    @-webkit-keyframes fadeIn {
+      0% {opacity:0}
+      100% {opacity:1;}
+    }
+    
   </style>
   
   <body>
       
-      <div class="main">
-        <h1>BY THE BARBOURSVILLE LEO CLUB</h1>
+      <div class="main fade-in">
+        <!--<h1>BY THE BARBOURSVILLE LEO CLUB</h1>-->
       </div>  
       
   </body>
   
   <script>
         
-    var myVar = setInterval(myTimer, 2000);
+    var myVar = setInterval(myTimer, 3000);
 
     function myTimer() {
       window.location = 'menu.html';

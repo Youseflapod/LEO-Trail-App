@@ -18,28 +18,86 @@
     <script src="js/ratchet.js"></script>
   </head>
   <body>
-      
-      <div class="main" style="background-color:#008000" onclick="location.href='trail_a.html';">
-        <h1>TRAIL A</h1>
+    
+    <div class="fade-in">
+      <div class="main" style="background-color:#008000" onclick="goHistory();">
+        <h1>HISTORY</h1>
       </div>
       
-      <div class="main" style="background-color:#FE4A36">
-        <h1>TRAIL B</h1>
+      <div class="main sandwich" style="background-color:rgb(0, 183, 255);" onclick="goFlora();">
+        <h1>FLORA AND FAUNA</h1>
       </div>
+
+      <div class="main" style="background-color:rgb(255, 68, 68)" onclick="goFitness();">
+        <h1>FITNESS</h1>
+      </div>
+
+    </div>
       
   </body>
   
+  <script>
+
+    function goHistory() {
+      localStorage.setItem("trail", "history");
+      location.href='trail.html';
+    }
+    function goFlora() {
+      localStorage.setItem("trail", "flora");
+      location.href='trail.html';
+    }
+    function goFitness() {
+      localStorage.setItem("trail", "fitness");
+      location.href='trail.html';
+    }
+  
+  </script>
+
   <style>
     
     h1 {
-      font-size: 4em
+      font-size: 4em;
+      text-align: center;
+    }
+
+    body {
+      background-color: black;
     }
     
     .main {
       display:flex;
       justify-content:center;
       align-items:center;
-      height:50vh; 
+      height:33.33333333vh; 
+      border-color: black;
+      border-style: solid;
+      border-top-width: 0.6vh;
+      border-bottom-width: 0.6vh;
+      border-left-width: 0.8vh;
+      border-right-width: 0.8vh;
+      border-radius: 5vh;
+    }
+    .sandwich {
+      border-top-width: 0vh;
+      border-bottom-width: 0vh;
+    }
+
+    .fade-in {
+      animation: fadeIn ease 2s;
+      -webkit-animation: fadeIn ease 2s;
+      -moz-animation: fadeIn ease 2s;
+    }
+    @keyframes fadeIn{
+      0% {opacity:0}
+      100% {opacity:1;}
+    }
+    @-moz-keyframes fadeIn {
+      0% {opacity:0}
+      100% {opacity:1;}
+    }
+    @-webkit-keyframes fadeIn {
+      0% {opacity:0}
+      100% {opacity:1;}
     }
     
   </style>

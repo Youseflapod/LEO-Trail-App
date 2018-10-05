@@ -19,18 +19,26 @@
   </head>
   <body>
     
-      <div class="main" onclick="audioAccessGranted()">
-        <h1 id="text">TRAIL A</h1>
+      <div class="main fade-in" onclick="audioAccessGranted()">
+        <h3 id="text">TAP TO BEGIN</h1>
       </div>  
+
+      <div class="intro" id="intro">
+        <h3>SWIPE LEFT AND RIGHT TO PLAY AUDIO</h3><br>
+        <h3>SWIPE DOWN TO SKIP 15 SECONDS BACK</h3><br>
+        <h3>HOLD TO RETURN TO MENU</h3>
+      </div>
 
   </body>
   
   <style>
     body {
-      background-color: gray;
+      background-color: black;
     }
-    h1 {
+    h3 {
       font-size: 3em;
+      color: white;
+      text-align: center;
     }
     .main {
       display:flex;
@@ -38,6 +46,32 @@
       align-items:center;
       height:100vh; 
     }
+    .intro {
+      display: none;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh; 
+    }
+    
+    .fade-in {
+      animation: fadeIn ease 1s;
+      -webkit-animation: fadeIn ease 1s;
+      -moz-animation: fadeIn ease 1s;
+    }
+    @keyframes fadeIn{
+      0% {opacity:0}
+      100% {opacity:1;}
+    }
+    @-moz-keyframes fadeIn {
+      0% {opacity:0}
+      100% {opacity:1;}
+    }
+    @-webkit-keyframes fadeIn {
+      0% {opacity:0}
+      100% {opacity:1;}
+    }
+
   </style>
   
 </html>
@@ -50,7 +84,9 @@ var numberOfTracks = 12;
 var canPlayAudio = false;
 
 function audioAccessGranted() {
-  document.body.style.backgroundColor = "aqua";
+  document.body.style.backgroundColor = "#A1E7FF";
+  document.getElementById("text").style.display = "none";
+  document.getElementById("intro").style.display = "unset";
   canPlayAudio = true;
 }
   
