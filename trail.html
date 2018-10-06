@@ -19,14 +19,14 @@
   </head>
   <body>
     
-      <div class="main fade-in" onclick="audioAccessGranted()">
-        <h3 id="text">TAP TO BEGIN</h1>
+      <div class="main fade-in" onclick="audioAccessGranted()" id="text">
+        <h3>TAP TO BEGIN</h1>
       </div>  
 
       <div class="intro" id="intro">
-        <h3>SWIPE LEFT AND RIGHT TO PLAY AUDIO</h3><br>
-        <h3>SWIPE DOWN TO SKIP 15 SECONDS BACK</h3><br>
-        <h3>HOLD TO RETURN TO MENU</h3>
+        <h5>SWIPE LEFT AND RIGHT TO PLAY AUDIO</h5>
+        <h5>SWIPE DOWN TO SKIP 15 SECONDS BACK</h5>
+        <h5>TAP AND HOLD TO RETURN TO MENU</h5>
       </div>
 
   </body>
@@ -40,18 +40,26 @@
       color: white;
       text-align: center;
     }
+    h5 {
+      font-size: 2.4em;
+      color: black;
+      text-align: center;
+    }
     .main {
-      display:flex;
+      display: flex;
       justify-content:center;
       align-items:center;
       height:100vh; 
     }
     .intro {
-      display: none;
-      display:flex;
-      justify-content:center;
-      align-items:center;
+      display: none; /*block*/
+      text-align: center;
       height:100vh; 
+      padding: 1em;
+      animation: fadeIn ease 1s;
+      -webkit-animation: fadeIn ease 1s;
+      -moz-animation: fadeIn ease 1s;
+      animation-play-state: paused;
     }
     
     .fade-in {
@@ -86,7 +94,8 @@ var canPlayAudio = false;
 function audioAccessGranted() {
   document.body.style.backgroundColor = "#A1E7FF";
   document.getElementById("text").style.display = "none";
-  document.getElementById("intro").style.display = "unset";
+  document.getElementById("intro").style.display = "block";
+  document.getElementById("intro").style.animationPlayState = "running";
   canPlayAudio = true;
 }
   
