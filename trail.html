@@ -24,9 +24,19 @@
       </div>  
 
       <div class="intro" id="intro">
-        <h5>SWIPE LEFT AND RIGHT TO PLAY AUDIO</h5>
-        <h5>SWIPE DOWN TO SKIP 15 SECONDS BACK</h5>
-        <h5>TAP AND HOLD TO RETURN TO MENU</h5>
+        <h5>SWIPE LEFT OR RIGHT:<p>next or previous audio track</p></h5>
+        <h5>SWIPE UP OR DOWN:<p>skip 10 seconds forward or back</p></h5>
+        <h5>TAP:<p>pause or play</p></h5>
+        <h5>HOLD:<p>return to menu</p></h5>
+      </div>
+
+      <div style="padding: 1em">
+        <div class="trail" id="trailDiv">
+          <h4 id="trailName">FLORA AND FAUNA</h4>
+        </div>
+        <div class="station" id="stationDiv">
+          <h1 id="stationNum">1</h1>
+        </div>
       </div>
 
   </body>
@@ -34,6 +44,29 @@
   <style>
     body {
       background-color: black;
+      /*background: url(skybg.jpg) no-repeat center center fixed;*/ 
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+    }
+    h1 {
+      font-size: 15em;
+      color: black;
+      text-align: center;
+      animation: fadeIn ease 0.3s;
+      -webkit-animation: fadeIn ease 0.3s;
+      -moz-animation: fadeIn ease 0.3s;
+      animation-play-state: running;
+    }
+    h4 {
+      font-size: 2.8em;
+      color: black;
+      text-align: center;
+      text-decoration: underline overline;
     }
     h3 {
       font-size: 3em;
@@ -41,9 +74,15 @@
       text-align: center;
     }
     h5 {
-      font-size: 2.4em;
+      font-size: 35.2px;
       color: black;
-      text-align: center;
+      background-color: rgba(122, 255, 237, 0.301);
+    }
+    p {
+      font-size: 33px;
+      color: black;
+      background-color: rgba(255, 255, 255, 0.301);
+      text-align: right;
     }
     .main {
       display: flex;
@@ -53,9 +92,33 @@
     }
     .intro {
       display: none; /*block*/
-      text-align: center;
+      text-align: left;
       height:100vh; 
       padding: 1em;
+      animation: fadeIn ease 1s;
+      -webkit-animation: fadeIn ease 1s;
+      -moz-animation: fadeIn ease 1s;
+      animation-play-state: paused;
+    }
+    .trail {
+      display:none; /*flex*/
+      justify-content:center;
+      align-items:center;
+      height:33vh;
+      animation: fadeIn ease 1s;
+      -webkit-animation: fadeIn ease 1s;
+      -moz-animation: fadeIn ease 1s;
+      animation-play-state: paused;
+    }
+    .station {
+      display:none; /*flex*/
+      justify-content:center;
+      align-items:center;
+      height:50vh;
+      border-color: white;
+      border-width: 10px;
+      border-radius: 100px;
+      border-style: dashed;
       animation: fadeIn ease 1s;
       -webkit-animation: fadeIn ease 1s;
       -moz-animation: fadeIn ease 1s;
@@ -88,38 +151,88 @@
 
 var hasFirstSwiped = false;
 var currentTrack = -1; // so first swipe lands on 0
-var numberOfTracks = 12;
+var numberOfTracks = 15;
 var canPlayAudio = false;
+var trailTitle = null;
+var trail = null;
+var audioLocation = null;
+var intro = new Audio("audio/misc/instructions.mp3");
 
 function audioAccessGranted() {
-  document.body.style.backgroundColor = "#A1E7FF";
+  //document.body.style.backgroundColor = "#A1E7FF";
+  document.body.style.backgroundImage = "url(skybg.jpg)";
   document.getElementById("text").style.display = "none";
   document.getElementById("intro").style.display = "block";
   document.getElementById("intro").style.animationPlayState = "running";
   canPlayAudio = true;
+  updateTrailIdentity();
+  intro.play();
 }
   
+function updateTrailIdentity() {
+  trail = localStorage.getItem("trail");
+  if (trail == "history") {
+    trailTitle = "HISTORY";
+    audioLocation = "audio/history";
+  } 
+  else if (trail == "flora") {
+    trailTitle = "FLORA AND FAUNA";
+    audioLocation = "audio/floraandfauna";  
+  }
+  else if (trail == "fitness") {
+    trailTitle = "FITNESS";
+    audioLocation = "audio/fitness";
+  }
+  document.getElementById("trailName").innerHTML = trailTitle;
+  setAudioData();
+}
+
 function swipeLeft() {
   if (canPlayAudio) {
+    if (currentTrack == -1) {//initial swipe
+      intro.pause();   
+      document.getElementById("intro").style.display = "none";
+      document.getElementById("trailDiv").style.display = "flex";
+      document.getElementById("stationDiv").style.display = "flex"; 
+      document.getElementById("trailDiv").style.animationPlayState = "running";
+      document.getElementById("stationDiv").style.animationPlayState = "running";         
+    }
     playNext();
     if (hasFirstSwiped == false) { hasFirstSwiped = true; } // unlocks back swipes
-    document.getElementById("text").innerHTML = currentTrack+1;
+    updateStationNum();
   }
 } 
 function swipeRight() {
   if (hasFirstSwiped && canPlayAudio) { // so no back swipes initially
     playPrevious();
-    document.getElementById("text").innerHTML = currentTrack+1;
+    updateStationNum();
   }
+}
+function swipeUp() {
+  skip(10);
+}
+function swipeDown() {
+  skip(-10);
+}
+function tap() {
+  togglePause();
+}
+
+function updateStationNum() {
+  document.getElementById("stationNum").innerHTML = currentTrack+1;
+  //document.getElementById("stationNum").style.animationPlayState = "none";
+  //document.getElementById("stationNum").style.animationPlayState = "";
+  var el = document.getElementById("stationNum");
+  el.style.animation = 'none';
+  el.offsetHeight; /* trigger reflow */
+  el.style.animation = null;   
 }
 
 function playPrevious() {
   audio[currentTrack].pause();
   if (currentTrack != 0) {
     currentTrack--;
-  } else {
-    currentTrack = numberOfTracks-1;
-  }
+  } 
   audio[currentTrack].currentTime = 0;
   audio[currentTrack].play();
 }
@@ -127,67 +240,117 @@ function playNext() {
   if (hasFirstSwiped) {audio[currentTrack].pause();} // so as to not pause non playing audio?
   if (currentTrack != numberOfTracks-1) {
     currentTrack++;
-  } else {
-    currentTrack = 0;
-  }
+  } 
   audio[currentTrack].currentTime = 0;
   audio[currentTrack].play();
 }
 
-var audio = [
-    new Audio('pseudoaudio/1.mp3'),
-    new Audio('pseudoaudio/2.mp3'),
-    new Audio('pseudoaudio/3.mp3'),
-    new Audio('pseudoaudio/4.mp3'),
-    new Audio('pseudoaudio/5.mp3'),
-    new Audio('pseudoaudio/6.mp3'),
-    new Audio('pseudoaudio/7.mp3'),
-    new Audio('pseudoaudio/8.mp3'),
-    new Audio('pseudoaudio/9.mp3'),
-    new Audio('pseudoaudio/10.mp3'),
-    new Audio('pseudoaudio/11.mp3'),
-    new Audio('pseudoaudio/12.mp3')
-  ];
-  
+function skipBack(skipTime) {
+  var currentTime = audio[currentTrack].currentTime;
+  if ((currentTime + skipTime) < 0) {
+    audio[currentTrack].currentTime = 0;
+  } else {
+    audio[currentTrack].currentTime = currentTime + skipTime;
+  }
+}
+
+function togglePause() {
+  if (audio[currentTrack].paused) {
+    audio[currentTrack].play();
+  } else {
+    audio[currentTrack].pause();
+  }
+}
+
+function stopAudio() {
+  audio[currentTrack].pause();
+}
+
+var audio = null
+
+function setAudioData() {
+  audio = 
+    [
+      new Audio(audioLocation+"/10.mp3"),
+      new Audio(audioLocation+"/20.mp3"),
+      new Audio(audioLocation+"/30.mp3"),
+      new Audio(audioLocation+"/40.mp3"),
+      new Audio(audioLocation+"/50.mp3"),
+      new Audio(audioLocation+"/60.mp3"),
+      new Audio(audioLocation+"/70.mp3"),
+      new Audio(audioLocation+"/80.mp3"),
+      new Audio(audioLocation+"/90.mp3"),
+      new Audio(audioLocation+"/100.mp3"),
+      new Audio(audioLocation+"/110.mp3"),
+      new Audio(audioLocation+"/120.mp3"),
+      new Audio(audioLocation+"/130.mp3"),
+      new Audio(audioLocation+"/140.mp3"),
+      new Audio(audioLocation+"/150.mp3")
+    ]  
+}
   
 document.addEventListener('touchstart', handleTouchStart, false);        
-document.addEventListener('touchmove', handleTouchMove, false);
+document.addEventListener('touchend', handleTouchEnd, false);
 
 var xDown = null;                                                        
 var yDown = null;                                                        
+var countdownStillHolding = null;
+var isTouching = false;
 
-function handleTouchStart(evt) {                                         
+function handleTouchStart(evt) {
+    isTouching = true;                                         
     xDown = evt.touches[0].clientX;                                      
-    yDown = evt.touches[0].clientY;                                      
+    yDown = evt.touches[0].clientY; 
+    countdownStillHolding = setInterval(checkIfStillTouching, 2800);                                     
 };                                                
 
-function handleTouchMove(evt) {
-    if ( ! xDown || ! yDown ) {
+function handleTouchEnd(evt) {
+  isTouching = false; 
+  clearInterval(countdownStillHolding);
+  if ( ! xDown || ! yDown ) {
         return;
     }
-
-    var xUp = evt.touches[0].clientX;                                    
-    var yUp = evt.touches[0].clientY;
+    
+    var xUp = evt.changedTouches[0].clientX;                                    
+    var yUp = evt.changedTouches[0].clientY;
 
     var xDiff = xDown - xUp;
     var yDiff = yDown - yUp;
-
+    var swipeDist = 130;
+    
+    var isSwipe = false;
     if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
-        if ( xDiff > 0 ) {
+        if ( xDiff > swipeDist ) {
+            isSwipe = true;
             /* left swipe */ swipeLeft();
-        } else {
+        } else if ( xDiff < -swipeDist) {
+          isSwipe = true;
             /* right swipe */ swipeRight();
         }                       
     } else {
-        if ( yDiff > 0 ) {
-            /* up swipe */ 
-        } else { 
+        if ( yDiff > swipeDist ) {
+            /* up swipe */
+            isSwipe = true;
+            swipeUp();
+        } else if ( yDiff < -swipeDist) { 
             /* down swipe */
+            isSwipe = true;
+            swipeDown();
         }                                                                 
+    }
+    if (isSwipe) {
+      tap();
     }
     /* reset values */
     xDown = null;
     yDown = null;                                             
 }
    
+function checkIfStillTouching() {
+  if (isTouching) {
+    if (currentTrack != -1) stopAudio();
+    location.href='menu.html';
+  }
+}
+
 </script>
