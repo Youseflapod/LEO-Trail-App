@@ -2,12 +2,12 @@
 <widget xmlns   = "http://www.w3.org/ns/widgets"
     xmlns:gap   = "http://phonegap.com/ns/1.0"
     id          = "org.barboursvilleleos.leotrails"
-    versionCode = "10"
-    version     = "1.0.0" >
+    versionCode = "12"
+    version     = "1.0.1" >
 
 <!-- versionCode is optional and Android only -->
 
-  <name>Barboursville LEOs Trail Companion</name>
+  <name>Barboursville LEOs Trails</name>
 
   <description>
      The Barboursville Park trails companion app from the LEOs! An audio guided experience through the trails 

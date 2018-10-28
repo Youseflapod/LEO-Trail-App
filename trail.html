@@ -18,7 +18,7 @@
     <script src="js/ratchet.js"></script>
   </head>
   <body>
-    
+    <div class="bg" id="bg">
       <div class="main fade-in" onclick="audioAccessGranted()" id="text">
         <h3>TAP TO BEGIN</h1>
       </div>  
@@ -38,19 +38,24 @@
           <h1 id="stationNum">1</h1>
         </div>
       </div>
-
+    </div>
   </body>
   
   <style>
-    body {
+    html {
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .bg {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
       background-color: black;
       /*background: url(skybg.jpg) no-repeat center center fixed;*/ 
       background-position: center center;
       background-repeat: no-repeat;
       background-attachment: fixed;
       -webkit-background-size: cover;
-      -moz-background-size: cover;
-      -o-background-size: cover;
       background-size: cover;
     }
     h1 {
@@ -159,8 +164,8 @@ var audioLocation = null;
 var intro = new Audio("audio/misc/instructions.mp3");
 
 function audioAccessGranted() {
-  //document.body.style.backgroundColor = "#A1E7FF";
-  document.body.style.backgroundImage = "url(skybg.jpg)";
+  document.getElementById("bg").style.backgroundColor = "#A1E7FF";
+  document.getElementById("bg").style.backgroundImage = "url(skybg.jpg)";
   document.getElementById("text").style.display = "none";
   document.getElementById("intro").style.display = "block";
   document.getElementById("intro").style.animationPlayState = "running";
@@ -215,7 +220,8 @@ function swipeDown() {
   skip(-10);
 }
 function tap() {
-  togglePause();
+  console.log("tap");
+  if (hasFirstSwiped) togglePause();
 }
 
 function updateStationNum() {
@@ -245,7 +251,7 @@ function playNext() {
   audio[currentTrack].play();
 }
 
-function skipBack(skipTime) {
+function skip(skipTime) {
   var currentTime = audio[currentTrack].currentTime;
   if ((currentTime + skipTime) < 0) {
     audio[currentTrack].currentTime = 0;
@@ -296,12 +302,13 @@ var xDown = null;
 var yDown = null;                                                        
 var countdownStillHolding = null;
 var isTouching = false;
+var menuTouchHoldLength = 2300;
 
 function handleTouchStart(evt) {
     isTouching = true;                                         
     xDown = evt.touches[0].clientX;                                      
     yDown = evt.touches[0].clientY; 
-    countdownStillHolding = setInterval(checkIfStillTouching, 2800);                                     
+    countdownStillHolding = setInterval(checkIfStillTouching, menuTouchHoldLength);                                     
 };                                                
 
 function handleTouchEnd(evt) {
@@ -318,29 +325,28 @@ function handleTouchEnd(evt) {
     var yDiff = yDown - yUp;
     var swipeDist = 130;
     
-    var isSwipe = false;
+    // CHECK FOR SWIPES
     if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
-        if ( xDiff > swipeDist ) {
-            isSwipe = true;
-            /* left swipe */ swipeLeft();
-        } else if ( xDiff < -swipeDist) {
-          isSwipe = true;
-            /* right swipe */ swipeRight();
-        }                       
-    } else {
-        if ( yDiff > swipeDist ) {
-            /* up swipe */
-            isSwipe = true;
-            swipeUp();
-        } else if ( yDiff < -swipeDist) { 
-            /* down swipe */
-            isSwipe = true;
-            swipeDown();
-        }                                                                 
+        if ( xDiff > swipeDist ) { /* left swipe */ swipeLeft(); } 
+        else if ( xDiff < -swipeDist) { /* right swipe */ swipeRight();}                       
+    } 
+    else { 
+        if ( yDiff > swipeDist ) { /* up swipe */ swipeUp(); }
+        else if ( yDiff < -swipeDist) { /* down swipe */ swipeDown(); }                                                                 
     }
-    if (isSwipe) {
+
+    var tapTolerance = 20; // how much wiggle rooom and still be tap
+    var isSwipe = false;
+
+    if ( xDiff > tapTolerance ) { /* left swipe */ isSwipe = true; } 
+    else if ( xDiff < -tapTolerance ) { /* right swipe */ isSwipe = true; }                       
+    else if ( yDiff > tapTolerance ) { /* up swipe */ isSwipe = true; }
+    else if ( yDiff < -tapTolerance ) { /* down swipe */ isSwipe = true; }                                                                 
+
+    if (isSwipe == false) {
       tap();
     }
+
     /* reset values */
     xDown = null;
     yDown = null;                                             
