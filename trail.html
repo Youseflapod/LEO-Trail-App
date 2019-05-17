@@ -24,10 +24,10 @@
       </div>  
 
       <div class="intro" id="intro">
-        <h5>SWIPE LEFT OR RIGHT:<p>next or previous audio track</p></h5>
-        <h5>SWIPE UP OR DOWN:<p>skip 10 seconds forward or back</p></h5>
-        <h5>TAP:<p>pause or play</p></h5>
-        <h5>HOLD:<p>return to menu</p></h5>
+        <h5>SWIPE LEFT OR RIGHT ——<p>next or previous audio track</p></h5>
+        <h5>SWIPE UP OR DOWN ——<p>skip 10 seconds forward or back</p></h5>
+        <h5>TAP ——<p>pause or play</p></h5>
+        <h5>HOLD —— <p>return to menu</p></h5>
       </div>
 
       <div style="padding: 1em">
@@ -81,12 +81,12 @@
     h5 {
       font-size: 35.2px;
       color: black;
-      background-color: rgba(122, 255, 237, 0.301);
+      /*background-color: rgba(122, 255, 237, 0.301);*/
     }
     p {
       font-size: 33px;
       color: black;
-      background-color: rgba(255, 255, 255, 0.301);
+      /*background-color: rgba(255, 255, 255, 0.301);*/
       text-align: right;
     }
     .main {
@@ -263,8 +263,14 @@ function skip(skipTime) {
 function togglePause() {
   if (audio[currentTrack].paused) {
     audio[currentTrack].play();
+    document.getElementById("stationNum").style.color = null;
+    document.getElementById("stationDiv").style.borderColor = null;
+    updateStationNum();
   } else {
     audio[currentTrack].pause();
+    document.getElementById("stationNum").style.color = "red";
+    document.getElementById("stationDiv").style.borderColor = "red";
+    document.getElementById("stationNum").innerHTML = "II";
   }
 }
 
@@ -302,7 +308,7 @@ var xDown = null;
 var yDown = null;                                                        
 var countdownStillHolding = null;
 var isTouching = false;
-var menuTouchHoldLength = 2300;
+var menuTouchHoldLength = 1300;
 
 function handleTouchStart(evt) {
     isTouching = true;                                         

@@ -16,61 +16,22 @@
     
     <!-- Include the compiled Ratchet JS -->
     <script src="js/ratchet.js"></script>
+    
+    <script src="global.js"></script>
   </head>
 
   <style>
-    div {
-      background-image: url(startup.jpg);
-      background-repeat: no-repeat;
-      background-size: cover;
-      -webkit-background-size: cover;
-      background-color: black;
-      background-position: center center;
-    }
-    .main {
-      height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      text-align:center
-    }
     
-    .fade-in {
-      animation: fadeIn ease 2s;
-      -webkit-animation: fadeIn ease 2s;
-      -moz-animation: fadeIn ease 2s;
-    }
-    @keyframes fadeIn{
-      0% {opacity:0}
-      100% {opacity:1;}
-    }
-    @-moz-keyframes fadeIn {
-      0% {opacity:0}
-      100% {opacity:1;}
-    }
-    @-webkit-keyframes fadeIn {
-      0% {opacity:0}
-      100% {opacity:1;}
+    body {
+      margin: 0;
     }
     
   </style>
   
   <body>
       
-      <div class="main fade-in">
-        <!--<h1>BY THE BARBOURSVILLE LEO CLUB</h1>-->
-      </div>  
+    <iframe src="startup.html" style="border: none; width: 100%; height: 100%" allow="autoplay">
       
   </body>
-  
-  <script>
-        
-    var myVar = setInterval(myTimer, 3000);
 
-    function myTimer() {
-      window.location = 'menu.html';
-    }
-
-  </script>
-  
 </html>

@@ -40,21 +40,21 @@
 
     function goHistory() {
       localStorage.setItem("trail", "history");
-      //var audio = new Audio("audio/misc/history_selected.mp3");
-      //audio.play();
+      localStorage.setItem("playSelect", "true");
+      localStorage.setItem("playTrail", "true");
       location.href='trail.html';
     }
     function goFlora() {
       localStorage.setItem("trail", "flora");
+      localStorage.setItem("playSelect", "true");
+      localStorage.setItem("playTrail", "true");
       location.href='trail.html';
-      //var audio = new Audio("audio/misc/floraandfauna_selected.mp3");
-     //audio.play();
     }
     function goFitness() {
       localStorage.setItem("trail", "fitness");
+      localStorage.setItem("playSelect", "true");
+      localStorage.setItem("playTrail", "true");
       location.href='trail.html';
-    //  var audio = new Audio("audio/misc/fitness_selected.mp3");
-     // audio.play();
     }
   
   </script>
