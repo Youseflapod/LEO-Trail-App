@@ -20,7 +20,15 @@
   <body>
     <div class="bg" id="bg">
       <div class="main fade-in" onclick="audioAccessGranted()" id="text">
-        <h3>TAP TO BEGIN</h1>
+        
+        <div class="author1">Written by</div>
+        <div class="author2" id="author">Brooke Powers</div>
+        
+        <h3>TAP TO BEGIN</h3>
+        
+        <div class="narrator1">Narrated by</div>
+        <div class="narrator2" id="narrator">Yousef Abdelgaber</div>
+        
       </div>  
 
       <div class="intro" id="intro">
@@ -77,6 +85,7 @@
       font-size: 3em;
       color: white;
       text-align: center;
+      position: relative;
     }
     h5 {
       font-size: 35.2px;
@@ -88,6 +97,42 @@
       color: black;
       /*background-color: rgba(255, 255, 255, 0.301);*/
       text-align: right;
+    }
+    .narrator1 {
+      font-size: 2em;
+      color: white;
+      text-align: center;
+      position: absolute;
+      padding-top: 55vh;
+      line-height: 1.5;
+      font-family: "Times New Roman", Times, serif;
+    }
+    .narrator2 {
+      font-size: 2em;
+      color: white;
+      text-align: center;
+      position: absolute;
+      padding-top: 70vh;
+      line-height: 1.5;
+      font-family: "Times New Roman", Times, serif;
+    }
+    .author1 {
+      font-size: 1.5em;
+      color: white;
+      text-align: center;
+      position: absolute;
+      padding-bottom: 90vh;
+      line-height: 1.5;
+      font-family: "Times New Roman", Times, serif;
+    }
+    .author2 {
+      font-size: 1.5em;
+      color: white;
+      text-align: center;
+      position: absolute;
+      padding-bottom: 79vh;
+      line-height: 1.5;
+      font-family: "Times New Roman", Times, serif;
     }
     .main {
       display: flex;
@@ -154,11 +199,15 @@
 
 <script>
 
+window.onload = updateTrailIdentity;
+
 var hasFirstSwiped = false;
 var currentTrack = -1; // so first swipe lands on 0
 var numberOfTracks = 15;
 var canPlayAudio = false;
 var trailTitle = null;
+var narrator = null;
+var author = null;
 var trail = null;
 var audioLocation = null;
 var intro = new Audio("audio/misc/instructions.mp3");
@@ -179,16 +228,24 @@ function updateTrailIdentity() {
   if (trail == "history") {
     trailTitle = "HISTORY";
     audioLocation = "audio/history";
+    narrator = "Olivia Turman";
+    author = "Sydney Riffe";
   } 
   else if (trail == "flora") {
     trailTitle = "FLORA AND FAUNA";
-    audioLocation = "audio/floraandfauna";  
+    audioLocation = "audio/floraandfauna";
+    narrator = "Brooke Powers";  
+    author = "Brooke Powers";
   }
   else if (trail == "fitness") {
     trailTitle = "FITNESS";
     audioLocation = "audio/fitness";
+    author = "Olivia T. & Brooke P."
+    narrator = "Yousef Abdelgaber";
   }
   document.getElementById("trailName").innerHTML = trailTitle;
+  document.getElementById("narrator").innerHTML = narrator;
+  document.getElementById("author").innerHTML = author;
   setAudioData();
 }
 
@@ -236,6 +293,10 @@ function updateStationNum() {
 
 function playPrevious() {
   audio[currentTrack].pause();
+  document.getElementById("stationNum").style.color = null;
+  document.getElementById("stationDiv").style.borderColor = null;
+  document.getElementById("trailName").style.textDecoration = null;
+  document.getElementById("trailName").innerHTML = trailTitle;
   if (currentTrack != 0) {
     currentTrack--;
   } 
@@ -244,6 +305,10 @@ function playPrevious() {
 }
 function playNext() {
   if (hasFirstSwiped) {audio[currentTrack].pause();} // so as to not pause non playing audio?
+  document.getElementById("stationNum").style.color = null;
+  document.getElementById("trailName").style.textDecoration = null;
+  document.getElementById("stationDiv").style.borderColor = null;
+  document.getElementById("trailName").innerHTML = trailTitle;
   if (currentTrack != numberOfTracks-1) {
     currentTrack++;
   } 
@@ -265,12 +330,16 @@ function togglePause() {
     audio[currentTrack].play();
     document.getElementById("stationNum").style.color = null;
     document.getElementById("stationDiv").style.borderColor = null;
+    document.getElementById("trailName").style.textDecoration = null;
+    document.getElementById("trailName").innerHTML = trailTitle;
     updateStationNum();
   } else {
     audio[currentTrack].pause();
     document.getElementById("stationNum").style.color = "red";
     document.getElementById("stationDiv").style.borderColor = "red";
     document.getElementById("stationNum").innerHTML = "II";
+    document.getElementById("trailName").innerHTML = "Hold for menu"
+    document.getElementById("trailName").style.textDecoration = "none";
   }
 }
 
@@ -329,7 +398,7 @@ function handleTouchEnd(evt) {
 
     var xDiff = xDown - xUp;
     var yDiff = yDown - yUp;
-    var swipeDist = 130;
+    var swipeDist = 90;
     
     // CHECK FOR SWIPES
     if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
